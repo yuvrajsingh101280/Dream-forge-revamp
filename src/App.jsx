@@ -1,35 +1,67 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ScrollTop from "./components/ScrollTop/ScrollTop.jsx";
+import Layout from "./components/layout/Layout.jsx";
+import HomePage from "./pages/home/HomePage.jsx";
+import AboutPage from "./pages/About/AboutPage.jsx";
+import Nopage from "./pages/Nopage/Nopage.jsx";
+import ServicePage from "./pages/Service/ServicePage.jsx";
+import PortfolioPage from "./pages/portfolio/PortfolioPage.jsx";
+import BlogPage from "./pages/blog/BlogPage.jsx";
+import { useState } from "react";
+import { useEffect } from "react";
+import LoadingImage from "./components/loadingimage/LoadingImage.jsx";
+const router = createBrowserRouter([
+  {
+    path: "/",
+
+    element: (
+      <>
+        <ScrollTop />
+        <Layout />
+      </>
+    ),
+    children: [
+      {
+        path: "",
+        element: <HomePage />,
+      },
+      {
+        path: "about",
+        element: <AboutPage />,
+      },
+      {
+        path: "*",
+        element: <Nopage />,
+      },
+      {
+        path: "services",
+        element: <ServicePage />,
+      },
+      {
+        path: "portfolio",
+        element: <PortfolioPage />,
+      },
+      {
+        path: "blog",
+        element: <BlogPage />,
+      },
+    ],
+  },
+]);
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [loading, setloading] = useState(true);
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setloading(false);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, []);
+  if (loading) {
+    return <LoadingImage />;
+  }
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;
